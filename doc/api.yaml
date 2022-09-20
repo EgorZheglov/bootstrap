@@ -1,0 +1,1085 @@
+openapi: 3.0.0
+info:
+  title: BTD Project
+  description: Sample NodeJS BTD spec
+  version: '1.0.0'
+
+servers:
+  - url: http://localhost:3000
+    description: dev server
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: me
+    description: operations about current user
+    
+  - name: user
+    description: operations about user
+    
+  - name: product
+    description: content about product
+    
+  - name: category
+    description: content about category
+  
+  - name: signup
+    description: signup current user
+  
+  - name: login
+    description: login current user
+    
+  - name: activation
+    description: activates user
+    
+  - name: refresh token
+    description: refresh tokens
+  
+  - name: healthcheck
+    description: healthcheck app
+    
+  - name: file-upload
+    description: file-upload of the app
+
+paths:
+  /api/me:
+    get:
+      tags:
+          - me
+      summary: Get current user
+      security:
+        - BearerAuth: []
+      description: Get current user
+      responses:
+        '200':
+          description: Response information depends on role
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Users'
+                  - $ref: '#/components/schemas/RestrictedUser'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+    put:
+      tags:
+        - me
+      summary: Update current user
+      security:
+        - BearerAuth: []
+      description: Update current user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+    
+    delete:
+      tags:
+        - me
+      summary: Delete current user
+      security:
+        - BearerAuth: []
+      description: Delete current user
+      responses:
+        '200':
+          description: Me deleted
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+    
+  /api/users:
+    get:
+      tags:
+        - user
+      summary: Get all users
+      security:
+        - BearerAuth: []
+      description: Get all users
+      responses:
+        '200':
+          description: Gets list of users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+                
+    post:
+      tags:
+        - user
+      summary: Create new user
+      security:
+        - BearerAuth: []
+      description: Create new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body'
+      responses:
+        '200':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+                  
+  /api/users/{userId}:
+    get:
+      tags:
+        - user
+      summary: Get user by ID
+      security:
+        - BearerAuth: []
+      description: Get user by ID
+      parameters:
+       - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: User response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+                
+    put:
+      tags:
+        - user
+      summary: Update user
+      security:
+        - BearerAuth: []
+      description: Update user
+      parameters:
+       - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+    
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      security:
+        - BearerAuth: []
+      description: Delete user
+      parameters:
+       - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: User deleted
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+
+  /api/products:
+    get:
+      tags:
+        - product
+      summary: Get all products
+      security:
+        - BearerAuth: []
+      description: Get all products
+      responses:
+        '200':
+          description: Gets list of products
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+    post:
+      tags:
+        - product
+      summary: Create product
+      security:
+        - BearerAuth: []
+      description: Create new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  
+  /api/products/{productId}:
+    get:
+      tags:
+        - product
+      summary: Get product by ID
+      security:
+        - BearerAuth: []
+      description: Get product by ID
+      parameters:
+       - $ref: '#/components/parameters/ProductId'
+      responses:
+        '200':
+          description: Product response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/NotFound'
+        default:
+          description: Unexpected error
+          
+    put:
+      tags:
+        - product
+      summary: Update product by ID
+      security:
+        - BearerAuth: []
+      description: Update product by ID
+      parameters:
+       - $ref: '#/components/parameters/ProductId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Product updated
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/NotFound'
+        default:
+          description: Unexpected error   
+    
+    delete:
+      tags:
+        - product
+      summary: Delete product by ID
+      security:
+        - BearerAuth: []
+      description: Delete product by ID
+      parameters:
+       - $ref: '#/components/parameters/ProductId'
+      responses:
+        '200':
+          description: Product deleted
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/NotFound'
+        default:
+          description: Unexpected error  
+          
+  /api/categories:
+    get:
+      tags:
+        - category
+      summary: Get all categories 
+      security:
+        - BearerAuth: []
+      description: Get all categories
+      responses:
+        '200':
+          description: Gets list of categories
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categories'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+                
+    post:
+      tags:
+        - category
+      summary: Create new category
+      security:
+        - BearerAuth: []
+      description: Create new category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyCategory'
+      responses:
+        '201':
+          description: Category created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+          
+  /api/categories/{categoryId}:
+    get:
+      tags:
+        - category
+      summary: Get category by ID
+      security:
+        - BearerAuth: []
+      description: Get category by ID
+      parameters:
+       - $ref: '#/components/parameters/CategoryId'
+      responses:
+        '200':
+          description: Category response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/NotFound'
+        default:
+          description: Unexpected error
+          
+    put:
+      tags:
+        - category
+      summary: Update category
+      security:
+        - BearerAuth: []
+      description: Update category
+      parameters:
+       - $ref: '#/components/parameters/CategoryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '200':
+          description: Category updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+    delete:
+      tags:
+        - category
+      summary: Delete category
+      security:
+        - BearerAuth: []
+      description: Delete category
+      parameters:
+       - $ref: '#/components/parameters/CategoryId'
+      responses:
+        '200':
+          description: Category deleted
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  /signup:
+    post:
+      tags:
+          - signup
+      summary: Register user
+      description: Register user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+
+      responses:
+        '200':
+          description: User registred
+        '400':
+          description: Bad request
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  /login:
+    post:
+      tags:
+          - login
+      summary: login user
+      description: login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/LogIn' 
+      responses:
+        '200':
+          description: User logged in
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/TokensResponse'
+        '302':
+          description: Moved temproraly
+        '400':
+          description: Bad request
+        '403':
+          description: Access Forbbiden
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  /verify-email/{activationToken}:
+    get:
+      tags:
+       - activation
+      summary: Activates user
+      parameters:
+       - $ref: '#/components/parameters/ActivationToken'
+      description: Activates user
+      responses:
+        '200':
+          description: Verfy user
+        '403':
+          description: Forbidden Access
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  /api/me/cart:
+    get:
+      tags:
+       - me
+      summary: Get cart of current user
+      security:
+        - BearerAuth: []
+      description: Get cart of current user
+      responses:
+        '200':
+          description: Carts of user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carts'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+    post:
+      tags:
+       - me
+      summary: Creates cart
+      security:
+        - BearerAuth: []
+      description: Creates cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      responses:
+        '200':
+          description: Created cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '400':
+          description: Bad request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+    delete:
+      tags:
+       - me
+      summary: delete all carts of current user
+      security:
+        - BearerAuth: []
+      description: delete all carts of current user
+      responses:
+        '200':
+          description: carts deleted
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  /api/me/cart/{cartId}:
+    delete:
+      tags:
+       - me
+      summary: delete all carts of current user
+      parameters:
+       - $ref: '#/components/parameters/CartId'
+      security:
+        - BearerAuth: []
+      description: delete all carts of current user
+      responses:
+        '200':
+          description: carts deleted
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  /refreshtoken:
+    post:
+      tags:
+       - refresh token
+      summary: Refresh user token
+      description: Refresh user token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  example: "a123456"
+      responses:
+        '200':
+          description: Verfy user
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+        '403':
+          description: Forbidden Access
+        '400':
+          description: Bad request
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/TokensResponse'
+                
+  /healthcheck:
+    get:
+      tags:
+       - healthcheck
+      summary: healthcheck application
+      description: healthcheck application
+      responses:
+        '200':
+          description: application work
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerInfo'
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+  /api/upload:
+    post:
+      tags:
+       - file-upload
+      summary: uploads array of files 
+      description: uploads array of files 
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                format: binary
+      responses:
+        '200':
+          description: Verfy user
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/ServerError'
+        '403':
+          description: Forbidden Access
+        '400':
+          description: Bad request
+        default:
+          description: Server Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/TokensResponse'
+                
+components:
+  schemas:
+    ServerInfo:
+        type: object
+        properties:
+          timestamp:
+            type: string
+          uptime:
+            type: number
+            example: 'a123456'  
+          version:
+            type: string
+            example: 'v1337'
+          database:
+            type: string
+            example: 'connected'
+    LogIn:
+      type: object
+      properties:
+        email:
+          type: string
+          example: jonh-doe@example.com
+        password:
+          type: string
+          example: 'a123456'
+    TokensResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: 'a1asd456'
+        refreshToken:
+          type: string
+          example: 'a123456'
+    Body:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 10
+          maxLength: 100
+          example: Jonh Doe
+        email:
+          type: string
+          example: jonh-doe@example.com
+        password:
+          type: string
+          example: '123456'
+    BodyCategory:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Category name
+        slug:
+          type: string
+          example: categoryslug
+    Users:
+      type: array
+      items:
+        $ref: "#/components/schemas/User" 
+    User: 
+      type: object
+      required:
+        - name
+        - role
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: Jonh Doe
+        role:
+          type: string
+          enum:
+            - Admin
+            - User
+          example: User
+        isActive:
+          type: boolean
+          example: false
+        email:
+          type: string
+          example: jonh-doe@example.com
+        password:
+          type: string
+          example: '123456'
+    RestrictedUser:
+      type: object
+      required:
+        - name
+        - role
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: Jonh Doe
+        email:
+          type: string
+          example: jonh-doe@example.com
+        password:
+          type: string
+          example: '123456'
+    NewUser:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Jonh Doe
+        email:
+          type: string
+          example: jonh-doe@example.com
+        password:
+          type: string
+          example: '123456'
+        confirm_password:
+          type: string
+          example: '123456'
+
+    Products:
+      type: array
+      items:
+        $ref: "#/components/schemas/Product"
+    Product: 
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 4
+        name:
+          type: string
+          example: Product Name
+        slug:
+          type: string
+          example: ThisProductJonhDoe
+        created date:
+          type: string
+          format: date
+          example: '2021-03-20'
+        number of views:
+          type: integer
+          format: int64
+          example: 14
+        price:
+          type: number
+          example: 400
+        description:
+          type: string
+          example: About JonhDoeJonhDoe JonhDoeJonhDoe
+        images:
+          type: string
+          format: binary
+
+    Categories:
+      type: array
+      items:
+        $ref: "#/components/schemas/Category"
+    Category: 
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 4
+        name:
+          type: string
+          example: Category Name
+        slug:
+          type: string
+          example: ThisCategorytJonhDoe
+    Carts:
+      type: array
+      items:
+        $ref: "#/components/schemas/Cart"
+    Cart: 
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 4
+        owner_id:
+          type: integer
+          format: int64
+          example: 4
+        product_id:
+          type: integer
+          format: int64
+          example: 4
+        name:
+          type: string
+          example: Cart Name
+        price:
+          type: number
+          example: 400
+        count:
+          type: integer
+          format: int 64
+          example: 2
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+
+    ServerError:
+      type: object
+      properties:
+        status: 
+          type: integer
+          enum:
+           - 500
+        error:
+          type: string
+          example: 'internal-server-error'
+        message:
+          type: string
+          example: 'Something went wrong'
+        extraDetails:
+          type: string
+          example: 'Extra error details'
+
+  responses:
+    ServerError:
+      description: Internal server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ServerError'
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  parameters:
+    CartId:
+      name: cartId
+      in: path
+      description: ID of cart to delete
+      required: true
+      schema:
+        type: number
+        example: 1
+    UserId:
+      name: userId
+      in: path
+      description: ID of user to use
+      required: true
+      schema:
+        type: number
+        example: 1
+    ProductId:
+      name: productId
+      in: path
+      description: ID of product to use
+      required: true
+      schema:
+        type: number
+        example: 1
+    CategoryId:
+      name: categoryId
+      in: path
+      description: ID of category to use
+      required: true
+      schema:
+        type: number
+        example: 1
+    ActivationToken:
+      name: activationToken
+      in: path
+      description: activation token
+      required: true
+      schema:
+        type: string
+        example: 'aaaaaaaaa'
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

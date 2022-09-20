@@ -1,0 +1,1 @@
+ALTER TABLE shop.cart ALTER COLUMN product_id type integer;

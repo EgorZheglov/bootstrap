@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "4379124a-d256-444f-a0fe-8c9dcb43a836",
+		"name": "auth0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "[sys] token user password",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"grant_type\": \"password\",\n    \"username\": \"rd-lab-admin@example.com\",\n    \"password\": \"123\",\n    \"scope\": \"openid\",\n    \"client_id\": \"jK6no2BLRVAYhhKoTwFFovPgDqGQnbLK\",\n    \"client_secret\": \"MVAI1FoZd8ghs0g4_2OyLUowEhSCCa-aMmfvVoNaVhQ3akO6lTdaGuVCbfpxccKW\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://rd-lab-dev.eu.auth0.com/oauth/token",
+					"protocol": "https",
+					"host": [
+						"rd-lab-dev",
+						"eu",
+						"auth0",
+						"com"
+					],
+					"path": [
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[sys] token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"client_id\":\"jK6no2BLRVAYhhKoTwFFovPgDqGQnbLK\",\n    \"client_secret\":\"MVAI1FoZd8ghs0g4_2OyLUowEhSCCa-aMmfvVoNaVhQ3akO6lTdaGuVCbfpxccKW\",\n    \"audience\":\"https://rd-lab-dev.eu.auth0.com/api/v2/\",\n    \"grant_type\":\"client_credentials\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://rd-lab-dev.eu.auth0.com/oauth/token",
+					"protocol": "https",
+					"host": [
+						"rd-lab-dev",
+						"eu",
+						"auth0",
+						"com"
+					],
+					"path": [
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/v2/users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "rd-lab-admin@example.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "jK6no2BLRVAYhhKoTwFFovPgDqGQnbLK",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "MVAI1FoZd8ghs0g4_2OyLUowEhSCCa-aMmfvVoNaVhQ3akO6lTdaGuVCbfpxccKW",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://rd-lab-dev.eu.auth0.com/api/v2/users",
+					"protocol": "https",
+					"host": [
+						"rd-lab-dev",
+						"eu",
+						"auth0",
+						"com"
+					],
+					"path": [
+						"api",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{Authorization}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.sendRequest({",
+					"  url: 'https://rd-lab-dev.eu.auth0.com/oauth/token',",
+					"  method: 'POST',",
+					"  header: {",
+					"      'content-type': 'application/json'",
+					"  },",
+					"  body: {",
+					"      mode: 'raw',",
+					"      raw: JSON.stringify({",
+					"        \"client_id\":\"jK6no2BLRVAYhhKoTwFFovPgDqGQnbLK\",",
+					"        \"client_secret\":\"MVAI1FoZd8ghs0g4_2OyLUowEhSCCa-aMmfvVoNaVhQ3akO6lTdaGuVCbfpxccKW\",",
+					"        \"audience\":\"https://rd-lab-dev.eu.auth0.com/api/v2/\",",
+					"        \"grant_type\":\"client_credentials\"",
+					"      })",
+					"  }",
+					"}, function (err, res) {",
+					"  pm.collectionVariables.set(\"Authorization\", res.json().access_token);",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.sendRequest({",
+					"  url: 'https://rd-lab-dev.eu.auth0.com/oauth/token',",
+					"  method: 'POST',",
+					"  header: {",
+					"      'content-type': 'application/json'",
+					"  },",
+					"  body: {",
+					"      mode: 'raw',",
+					"      raw: JSON.stringify({",
+					"        \"client_id\":\"jK6no2BLRVAYhhKoTwFFovPgDqGQnbLK\",",
+					"        \"client_secret\":\"MVAI1FoZd8ghs0g4_2OyLUowEhSCCa-aMmfvVoNaVhQ3akO6lTdaGuVCbfpxccKW\",",
+					"        \"audience\":\"https://rd-lab-dev.eu.auth0.com/api/v2/\",",
+					"        \"grant_type\":\"client_credentials\"",
+					"      })",
+					"  }",
+					"}, function (err, res) {",
+					"  pm.collectionVariables.set(\"Authorization\", res.json().access_token);",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Authorization",
+			"value": ""
+		}
+	]
+}

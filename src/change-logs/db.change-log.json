@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "sqlFile": "1_initial-script.sql"
+    },
+    {
+        "id": 2,
+        "sqlFile": "2_add-unique-constraint-to-users.sql"
+    },
+    {
+        "id": 3,
+        "sqlFile": "3_create-table-auth-tokens.sql"
+    },
+    {
+        "id": 4,
+        "sqlFile": "4_change-cart-owner-id-fk.sql"
+    },
+    {
+        "id": 5,
+        "sqlFile": "5_change-cart-count.sql"
+    },
+    {
+        "id": 6,
+        "sqlFile": "6_change-cart-product-id-fk.sql"
+    },
+    {
+        "id": 7,
+        "sqlFile": "7_add-default-value-number-of-views-product.sql"
+    },
+    {
+        "id": 8,
+        "sqlFile": "8_add-soft-delete-column-for-users.sql"
+    },
+    {
+        "id": 9,
+        "sqlFile": "9_rename-is_active-column-for-users.sql"
+    }
+]

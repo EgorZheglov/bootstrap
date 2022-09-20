@@ -1,0 +1,1 @@
+ALTER TABLE shop.users ADD COLUMN soft_delete BOOLEAN DEFAULT FALSE;

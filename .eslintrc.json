@@ -1,0 +1,74 @@
+{
+	"env": {
+		"es2021": true,
+		"node": true,
+		"jest": true
+	},
+	"extends": [
+		"airbnb-base",
+		"airbnb-typescript/base",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:eslint-comments/recommended",
+		"plugin:jest/recommended",
+		"plugin:promise/recommended",
+		"prettier"
+	],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"project": "./tsconfig.eslint.json"
+	},
+	"plugins": [
+		"@typescript-eslint",
+		"eslint-comments",
+		"jest",
+		"sort-imports-es6-autofix",
+		"promise",
+		"prettier"
+	],
+	"rules": {
+		"guard-for-in": 0, /* disable error where for in cycle without wrapping */
+		"no-restricted-syntax": 0, /* disabled error with using for in cycle */
+		"no-console": "warn", // /* console.log warnings */
+		"import/no-cycle": "warn", /* cycle-importing throws warning */
+		"default-case": "warn", 
+		"@typescript-eslint/ban-types": [
+			"error",
+			{
+			  "extendDefaults": true,
+			  "types": {
+				"{}": false		/* added as exclusion type: {} */
+			  }
+			}
+		  ],
+		"@typescript-eslint/no-throw-literal": 0, /* disabled debug 'error' without throw rule */
+		"prettier/prettier": "error",
+		"import/prefer-default-export": 0, /* export default preference switched off */
+		"consistent-return": "warn", /* for arrow functions which are not returning value */
+		"no-use-before-define": [
+			"error",
+			{
+				"functions": false,
+				"classes": true,
+				"variables": true
+			}
+		],
+		"@typescript-eslint/explicit-function-return-type": 0, /* allows to use arrow f without "return" word */
+		"@typescript-eslint/no-use-before-define": [
+			"error",
+			{
+				"functions": false,
+				"classes": true,
+				"variables": true,
+				"typedefs": true
+			}
+		],
+		"import/no-extraneous-dependencies": 0,
+		"@typescript-eslint/naming-convention": [
+			"error",
+			{
+			  "selector": "variable",
+			  "format": ["camelCase", "PascalCase", "UPPER_CASE", "snake_case"]
+			}
+		  ]
+	}
+}
