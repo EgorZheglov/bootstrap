@@ -1,10 +1,7 @@
-## Project EPM-LSTR-JSN Born to Die for Node JS
-
 ### Short description:
 Back-end part for online-shop.
 The information about products stored in DB layer.
 Application provides secured access to users and products information.
-It uses OAuth as a way for grant access for users.
 
 ### Languages, Technologies, Tools:  
 
