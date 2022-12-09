@@ -20,7 +20,6 @@ Application provides secured access to users and products information.
 ### Quick Start
 
 ```
-$ git clone https://git.epam.com/epm-lstr/epm-lstr-jsn/nodejs-lab-bootstrap.git
 $ cd nodejs-lab-bootstrap
 $ npm install
 $ npm run dev
